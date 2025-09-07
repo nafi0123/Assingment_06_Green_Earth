@@ -2,7 +2,6 @@ console.log(222);
 const btnContainer = document.getElementById("button-container");
 const cardContainer = document.getElementById("card-container");
 
-
 // plantsByCategories section
 const displayPlantsByCategories = (plants) => {
   console.log(plants);
@@ -10,11 +9,12 @@ const displayPlantsByCategories = (plants) => {
 
   for (let plant of plants) {
     const div = document.createElement("div");
-div.innerHTML = `
-  <div class="card bg-base-100 w-full shadow-sm h-[370px] flex flex-col">
+    div.classList.add("h-full","w-full");
+    div.innerHTML = `
+  <div class="card bg-base-100 w-full h-full shadow-sm flex flex-col justify-between">
     <div class="p-2">
-      <figure>
-        <img class="rounded-lg w-full h-[150px] object-cover" 
+      <figure class="aspect-square">
+        <img class="rounded-lg w-full h-full object-cover" 
           src="${plant.image}" alt="Plant Image" />
       </figure>
     </div>
@@ -41,7 +41,6 @@ div.innerHTML = `
     cardContainer.appendChild(div);
   }
 };
-
 
 const loadPlantsByCategories = (id) => {
   const url = `https://openapi.programming-hero.com/api/category/${id}`;
