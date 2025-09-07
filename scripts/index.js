@@ -2,6 +2,11 @@ console.log(222);
 const btnContainer = document.getElementById("button-container");
 const cardContainer = document.getElementById("card-container");
 
+// cart section
+function cartFunction(){
+  
+}
+
 // toggle btn
 
 const removeActive = () => {
@@ -9,14 +14,15 @@ const removeActive = () => {
   lessonButtons.forEach((btn) => btn.classList.remove("active"));
 };
 
-// "plants": {
-// "id": 1,
-// "image": "https://i.ibb.co.com/cSQdg7tf/mango-min.jpg",
-// "name": "Mango Tree",
-// "description": "A fast-growing tropical tree that produces delicious, juicy mangoes during summer. Its dense green canopy offers shade, while its sweet fruits are rich in vitamins and minerals.",
-// "category": "Fruit Tree",
-// "price": 500
-// }
+// loadding section
+
+function manageLoading(status) {
+  if (status === true) {
+    document.getElementById("spinner").classList.remove("hidden");
+  } else {
+    document.getElementById("spinner").classList.add("hidden");
+  }
+}
 
 // modal section
 
@@ -42,9 +48,7 @@ const displayModalDes = (detail) => {
         <div class="font-bold bg-[#DCFCE7] rounded-[20px] text-[10px] p-[6px]">
           ${detail.category}
         </div>
-        <div class="text-[10px] font-bold">৳<span id="amount">${
-          detail.price
-        }</span></div>
+        <div class="text-[10px] font-bold">৳<span id="amount">${detail.price}</span></div>
       </div>
     </div>
   </div>
@@ -63,7 +67,7 @@ const loadModalDes = (id) => {
 
 // plantsByCategories section
 const displayPlantsByCategories = (plants) => {
-  console.log(plants, 1);
+  manageLoading(true);
   cardContainer.innerHTML = "";
 
   for (let plant of plants) {
@@ -96,7 +100,7 @@ const displayPlantsByCategories = (plants) => {
           plant.price
         }</span></div>
       </div>
-      <button class="btn bg-[#15803D] w-full rounded-[999px] text-white text-[10px] mt-auto">
+      <button class="btn bg-[#15803D] w-full rounded-[999px] text-white text-[10px] mt-auto" onclick="cartFunction()">
         Add to Cart
       </button>
     </div>
@@ -105,9 +109,11 @@ const displayPlantsByCategories = (plants) => {
 
     cardContainer.appendChild(div);
   }
+  manageLoading(false);
 };
 
 const loadPlantsByCategories = (id) => {
+  manageLoading(true);
   const url = `https://openapi.programming-hero.com/api/category/${id}`;
   fetch(url)
     .then((res) => res.json())
@@ -123,6 +129,7 @@ const loadPlantsByCategories = (id) => {
 // all tree
 
 const allLoadCategories = () => {
+  manageLoading(true);
   fetch("https://openapi.programming-hero.com/api/plants")
     .then((res) => res.json())
     .then((json) => {
