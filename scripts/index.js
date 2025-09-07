@@ -23,7 +23,7 @@ const displayPlantsByCategories = (plants) => {
     <div class="p-2">
       <figure class="aspect-square">
         <img class="rounded-lg w-full h-full object-cover" 
-          src="" alt="Plant Image" />
+          src="${plant.image}" alt="Plant Image" />
       </figure>
     </div>
     <div class="card-body flex flex-col flex-1">
