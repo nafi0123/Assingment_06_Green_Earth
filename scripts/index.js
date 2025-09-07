@@ -6,13 +6,64 @@ const cardContainer = document.getElementById("card-container");
 
 const removeActive = () => {
   const lessonButtons = document.querySelectorAll(".tree-btn");
-  //   console.log(lessonButtons);
   lessonButtons.forEach((btn) => btn.classList.remove("active"));
+};
+
+// "plants": {
+// "id": 1,
+// "image": "https://i.ibb.co.com/cSQdg7tf/mango-min.jpg",
+// "name": "Mango Tree",
+// "description": "A fast-growing tropical tree that produces delicious, juicy mangoes during summer. Its dense green canopy offers shade, while its sweet fruits are rich in vitamins and minerals.",
+// "category": "Fruit Tree",
+// "price": 500
+// }
+
+// modal section
+
+const displayModalDes = (detail) => {
+  const modalContainer = document.getElementById("modal-container");
+
+  const modal = document.getElementById("my_modal_5").showModal();
+
+  modalContainer.innerHTML = `
+  <div class="card bg-base-100 w-full h-full shadow-sm flex flex-col justify-between">
+    <div class="p-2">
+      <figure class="aspect-square">
+        <img class="rounded-lg w-full h-full object-cover" 
+          src="${detail.image}" alt="Plant Image" />
+      </figure>
+    </div>
+    <div class="card-body flex flex-col flex-1">
+      <h2 class="card-title text-[13px]">${detail.name}</h2>
+      <p class="text-gray-600 text-[10px] text-justify flex-1 overflow-hidden">
+        ${detail.description}
+      </p>
+      <div class="flex justify-between items-center mt-2">
+        <div class="font-bold bg-[#DCFCE7] rounded-[20px] text-[10px] p-[6px]">
+          ${detail.category}
+        </div>
+        <div class="text-[10px] font-bold">৳<span id="amount">${
+          detail.price
+        }</span></div>
+      </div>
+    </div>
+  </div>
+`;
+};
+
+const loadModalDes = (id) => {
+  url = `https://openapi.programming-hero.com/api/plant/${id}`;
+
+  fetch(url)
+    .then((res) => res.json(url))
+    .then((json) => {
+      displayModalDes(json.plants);
+    });
 };
 
 // plantsByCategories section
 const displayPlantsByCategories = (plants) => {
-  console.log(plants);
+  console.log(plants, 1);
   cardContainer.innerHTML = "";
 
   for (let plant of plants) {
@@ -27,7 +78,9 @@ const displayPlantsByCategories = (plants) => {
       </figure>
     </div>
     <div class="card-body flex flex-col flex-1">
-      <h2 class="card-title text-[13px]">${plant.category}</h2>
+      <h2 class="card-title text-[13px]" onclick="loadModalDes(${
+        plant.id
+      })"   >${plant.name}</h2>
       <p class="text-gray-600 text-[10px] text-justify flex-1 overflow-hidden">
         ${
           plant.description.length > 80
@@ -113,13 +166,11 @@ const displayCategories = (btns) => {
 const loadCategories = () => {
   fetch("https://openapi.programming-hero.com/api/categories")
     .then((res) => res.json())
-    .then((json) =>{
+    .then((json) => {
       allLoadCategories();
 
-      displayCategories(json.categories)
-
-    } );
+      displayCategories(json.categories);
+    });
 };
 
 loadCategories();
-
