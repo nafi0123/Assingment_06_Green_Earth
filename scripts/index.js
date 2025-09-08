@@ -101,7 +101,7 @@ function cartCalculation(arr) {
 function updateCart(name, quantity, singlePrice) {
   let data = {
     name: name,
-    price: singlePrice * quantity, 
+    price: singlePrice * quantity,
     quantity: quantity,
     singlePrice: singlePrice,
   };
@@ -117,6 +117,7 @@ function disCart(name, price, quantity, singlePrice) {
 // name, price, quantity, singlePrice
 
 function cartFunction(name, price, quantity, singlePrice) {
+  alert(`${name} has been added to the cart`)
   updateCart(name, quantity, singlePrice);
 }
 // toggle btn
@@ -131,11 +132,10 @@ const removeActive = () => {
 function manageLoading(status) {
   if (status === true) {
     document.getElementById("spinner").classList.remove("hidden");
-    cardContainer.classList.add("hidden")
-
+    cardContainer.classList.add("hidden");
   } else {
     document.getElementById("spinner").classList.add("hidden");
-        cardContainer.classList.remove("hidden")
+    cardContainer.classList.remove("hidden");
   }
 }
 
@@ -194,7 +194,7 @@ const displayPlantsByCategories = (plants) => {
     <div class="p-2">
       <figure class="aspect-square">
         <img class="rounded-lg w-full h-full object-cover" 
-          src="" alt="Plant Image" />
+          src="${plant.image}" alt="${plant.name}" />
       </figure>
     </div>
     <div class="card-body flex flex-col flex-1">
