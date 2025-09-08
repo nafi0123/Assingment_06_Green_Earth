@@ -17,13 +17,19 @@ const TotalValue = document.getElementById("total-value");
 
 // Total Section
 function displayTotal(arr) {
-  console.log(arr, 555555);
+  console.log(arr,13333)
+
   TotalValue.innerText = "";
   let sumPrice = 0;
   arr.forEach((price) => {
     sumPrice += price.price;
   });
-  TotalValue.innerText = sumPrice;
+    if (arr.length === 0) {
+    TotalValue.innerText = 0;
+  } else {
+    TotalValue.innerText = sumPrice;
+  }
+  // TotalValue.innerText = sumPrice;
 }
 
 // cart section
@@ -84,8 +90,8 @@ function cartCalculation(arr) {
   }
 
   console.log(map, 11111111);
-  var result = [];
-  for (var k in map) {
+  let result = [];
+  for (let k in map) {
     if (Object.prototype.hasOwnProperty.call(map, k)) {
       if (map[k].quantity > 0) {
         result.push(map[k]);
@@ -96,6 +102,7 @@ function cartCalculation(arr) {
   console.log(result, 111122);
 
   displayCart(result);
+  displayTotal(result)
 }
 
 function updateCart(name, quantity, singlePrice) {
