@@ -18,7 +18,7 @@ const TotalValue = document.getElementById("total-value");
 // Total Section
 function displayTotal(arr) {
   console.log(arr, 555555);
-  TotalValue.innerText = 0;
+  TotalValue.innerText = "";
   let sumPrice = 0;
   arr.forEach((price) => {
     sumPrice += price.price;
@@ -44,7 +44,7 @@ function displayCart(cartsData) {
                               </p>
                           </div>
 
-                          <button class="btn btn-sm  hover:bg-green-900 hover:text-white" onclick="disCart('${cart.name}', ${cart.price}, -1, ${cart.singlePrice})"
+                          <button class="btn btn-sm  hover:bg-green-900 hover:text-white" onclick="disCart('${cart.name}', ${cart.singlePrice}, -1, ${cart.singlePrice})"
 >
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
                                   stroke="currentColor">
@@ -59,6 +59,8 @@ function displayCart(cartsData) {
               </div>
           </div>`;
     cartContainer.appendChild(div);
+
+    displayTotal(cartsData);
   }
 }
 function cartCalculation(arr) {
@@ -91,39 +93,32 @@ function cartCalculation(arr) {
     }
   }
 
+  console.log(result, 111122);
+
   displayCart(result);
-  displayTotal(result);
 }
 
-function disCart(name, price, quantity, singlePrice) {
-  console.log(1111);
+function updateCart(name, quantity, singlePrice) {
   let data = {
     name: name,
-    price: price,
+    price: singlePrice * quantity, 
     quantity: quantity,
     singlePrice: singlePrice,
   };
-  cartData.push(data);
 
+  cartData.push(data);
   cartCalculation(cartData);
+}
+
+function disCart(name, price, quantity, singlePrice) {
+  updateCart(name, quantity, singlePrice);
 }
 
 // name, price, quantity, singlePrice
 
 function cartFunction(name, price, quantity, singlePrice) {
-  // console.log(name, price, quantity);
-
-  let data = {
-    name: name,
-    price: price,
-    quantity: quantity,
-    singlePrice: singlePrice,
-  };
-  cartData.push(data);
-
-  cartCalculation(cartData);
+  updateCart(name, quantity, singlePrice);
 }
-
 // toggle btn
 
 const removeActive = () => {
@@ -136,8 +131,11 @@ const removeActive = () => {
 function manageLoading(status) {
   if (status === true) {
     document.getElementById("spinner").classList.remove("hidden");
+    cardContainer.classList.add("hidden")
+
   } else {
     document.getElementById("spinner").classList.add("hidden");
+        cardContainer.classList.remove("hidden")
   }
 }
 
@@ -176,7 +174,7 @@ const loadModalDes = (id) => {
   url = `https://openapi.programming-hero.com/api/plant/${id}`;
 
   fetch(url)
-    .then((res) => res.json(url))
+    .then((res) => res.json())
     .then((json) => {
       displayModalDes(json.plants);
     });
