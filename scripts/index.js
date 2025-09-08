@@ -1,10 +1,127 @@
-console.log(222);
+let cartData = [];
 const btnContainer = document.getElementById("button-container");
 const cardContainer = document.getElementById("card-container");
+const cartContainer = document.getElementById("cart-container");
+
+const TotalValue = document.getElementById("total-value");
+
+// name
+// :
+// "Mango Tree"
+// price
+// :
+// 3000
+// quantity
+// :
+// 6
+
+// Total Section
+function displayTotal(arr) {
+  console.log(arr, 555555);
+  TotalValue.innerText = 0;
+  let sumPrice = 0;
+  arr.forEach((price) => {
+    sumPrice += price.price;
+  });
+  TotalValue.innerText = sumPrice;
+}
 
 // cart section
-function cartFunction(){
-  
+
+function displayCart(cartsData) {
+  cartContainer.innerHTML = "";
+  console.log(cartsData);
+  for (let cart of cartsData) {
+    const div = document.createElement("div");
+    div.innerHTML = `
+              <div class="card   shadow-sm  bg-[#F0FDF4] m-2 shadow-lg ">
+              <div class="card-body">
+                  <div class=" ">
+                      <div class="flex justify-between items-center gap-1">
+                          <div>
+                              <h5 class="text-[12px] font-semibold">${cart.name}</h5>
+                              <p class="text-[12px]"><span>৳</span><span>${cart.singlePrice}</span> x <span>${cart.quantity}</span>
+                              </p>
+                          </div>
+
+                          <button class="btn btn-sm  hover:bg-green-900 hover:text-white" onclick="disCart('${cart.name}', ${cart.price}, -1, ${cart.singlePrice})"
+>
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                                  stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+
+                          </button>
+
+                      </div>
+                  </div>
+              </div>
+          </div>`;
+    cartContainer.appendChild(div);
+  }
+}
+function cartCalculation(arr) {
+  let map = {};
+
+  console.log(arr);
+
+  for (let item of arr) {
+    let key = (item.name || " ").trim();
+    if (!map[key]) {
+      map[key] = {
+        name: key,
+        quantity: 0,
+        price: 0,
+        singlePrice: item.singlePrice,
+      };
+    }
+
+    map[key].quantity += Number(item.quantity) || 0;
+    map[key].price += Number(item.price) || 0;
+  }
+
+  console.log(map, 11111111);
+  var result = [];
+  for (var k in map) {
+    if (Object.prototype.hasOwnProperty.call(map, k)) {
+      if (map[k].quantity > 0) {
+        result.push(map[k]);
+      }
+    }
+  }
+
+  displayCart(result);
+  displayTotal(result);
+}
+
+function disCart(name, price, quantity, singlePrice) {
+  console.log(1111);
+  let data = {
+    name: name,
+    price: price,
+    quantity: quantity,
+    singlePrice: singlePrice,
+  };
+  cartData.push(data);
+
+  cartCalculation(cartData);
+}
+
+// name, price, quantity, singlePrice
+
+function cartFunction(name, price, quantity, singlePrice) {
+  // console.log(name, price, quantity);
+
+  let data = {
+    name: name,
+    price: price,
+    quantity: quantity,
+    singlePrice: singlePrice,
+  };
+  cartData.push(data);
+
+  cartCalculation(cartData);
 }
 
 // toggle btn
@@ -67,9 +184,10 @@ const loadModalDes = (id) => {
 
 // plantsByCategories section
 const displayPlantsByCategories = (plants) => {
+  console.log(plants);
   manageLoading(true);
   cardContainer.innerHTML = "";
-
+  // ${plant.image}
   for (let plant of plants) {
     const div = document.createElement("div");
     div.classList.add("h-full", "w-full");
@@ -78,7 +196,7 @@ const displayPlantsByCategories = (plants) => {
     <div class="p-2">
       <figure class="aspect-square">
         <img class="rounded-lg w-full h-full object-cover" 
-          src="${plant.image}" alt="Plant Image" />
+          src="" alt="Plant Image" />
       </figure>
     </div>
     <div class="card-body flex flex-col flex-1">
@@ -100,7 +218,10 @@ const displayPlantsByCategories = (plants) => {
           plant.price
         }</span></div>
       </div>
-      <button class="btn bg-[#15803D] w-full rounded-[999px] text-white text-[10px] mt-auto" onclick="cartFunction()">
+      <button class="btn bg-[#15803D] w-full rounded-[999px] text-white text-[10px] mt-auto" onclick="cartFunction('${
+        plant.name
+      }', ${plant.price}, ${1},${plant.price})"
+>
         Add to Cart
       </button>
     </div>
@@ -120,7 +241,7 @@ const loadPlantsByCategories = (id) => {
     .then((json) => {
       removeActive();
       const clickBtn = document.getElementById(`tree-btn${id}`);
-      console.log(clickBtn);
+
       clickBtn.classList.add("active");
       displayPlantsByCategories(json.plants);
     });
@@ -146,8 +267,6 @@ const allLoadCategories = () => {
 const displayCategories = (btns) => {
   btnContainer.innerHTML = "";
 
-  console.log(btns);
-
   const allDiv = document.createElement("div");
 
   allDiv.innerHTML = `
@@ -159,7 +278,7 @@ const displayCategories = (btns) => {
 
   for (let btn of btns) {
     const div = document.createElement("div");
-    console.log(btn.id);
+
     div.innerHTML = `
     <div id="tree-btn${btn.id}" class="tree-btn p-1 pl-2 text-[#1F2937]  hover:bg-green-900 hover:text-white rounded-sm " onclick="loadPlantsByCategories(${btn.id})">${btn.category_name}</div>
     
